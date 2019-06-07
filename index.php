@@ -1,0 +1,69 @@
+	<?php include 'inc/header.php'?>
+	<?php include 'lib/student.php'?>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("form").submit(funcion(){
+
+			});
+		});
+
+		
+	</script>
+	<?php
+		error_reporting(0);
+		$stu= new student();
+		$curr_date= date('Y-m-d');
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+		$attend = $_POST['attend'];
+		$insertattend = $stu->insertAttendance($curr_date,$attend);
+	}
+	?>
+	<?php
+	if(isset($insertattend)){
+		echo $insertattend;
+	}
+?>
+	<div class="text-center mt-2">
+			<h2 style="font-size: 20px;">Date:<?php echo $curr_date;?></h2>
+		</div>
+		<div class="">
+			<a href="add.php" class="btn btn-success">Add Student</a>
+			<a href="view.php"class="btn btn-success" style="float: right;">View All</a>
+		</div>
+		<div class="mt-5">
+			<form action=""method="post">
+			<table class="table table-striped">
+				<tr>
+					<th width="25%">Serial</th>
+					<th width="25%">Student Name</th>
+					<th width="25%">Roll</th>
+					<th width="25%">Attendance</th>
+				</tr>
+			<?php 
+				$get_student = $stu->getStudents();
+				if($get_student){
+					$i=0;
+					while($value= $get_student->fetch_assoc()){
+						$i++;
+				
+				
+			?>
+				<tr>
+					<td><?php echo $i;?></td>
+					<td><?php echo $value['name']?></td>
+					<td><?php echo $value['roll']?></td>
+					<td>
+						<input type="radio" value="present" name="attend[<?php echo $value['roll']?>]">P
+						<input type="radio" value="absent" name="attend[<?php echo $value['roll']?>]">A
+					</td>
+				</tr>
+		<?php } } ?>
+				
+				<tr>
+					<td colspan="4"><input type="submit" value="Submit" name="submit"class="btn btn-success"></td>
+				</tr>
+			</table>
+		</form>
+		</div>
+		
+	<?php include 'inc/footer.php'?>
